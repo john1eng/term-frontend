@@ -1,41 +1,90 @@
-import React from 'react';
+import React from "react";
+import { deleteTerm } from "../api/deleteTerm";
+import { updateTerm } from "../api/updateTerm";
 
-const Term = () => {
+const deleteHandler = (word) => {
+  deleteTerm(word);
+};
+const Term = ({ term }) => {
+  const [termState, setTermState] = React.useState(term);
 
-    const [term, setTerm] = React.useState({def:"+"});
+  console.log(termState);
 
-    const fetchData = async() => {
-        console.log("hello")
-        const response = await fetch('http://localhost:4000/term/test2', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const data = await response.json()
-        console.log(data.def.term)
-        setTerm(data)
-        // setTerm(response);
-        
+  const inputHandler = (e) => {
+    console.log(e);
+    switch (e.target.id) {
+      case "term":
+        setTermState({ ...termState, term: e.target.value });
+        break;
+      case "definition":
+        setTermState({ ...termState, definition: e.target.value });
+        break;
+      case "examples":
+        setTermState({ ...termState, examples: [e.target.value] });
+        break;
+      case "sources":
+        setTermState({ ...termState, sources: [e.target.value] });
+        break;
+      default:
     }
+    return;
+  };
 
-    React.useEffect(()=>{
-        fetchData();
-    },[])
+  const updateHandler = (e) => {
+    e.preventDefault();
+    updateTerm({...termState, oldTerm: term.term});
+  };
 
-    const termDis = (<div>
-                        <div>term: {term.def.term}</div>
-                        <div>definition: {term.def.definition}</div>
-                        {/* <div>examples: {term.def.examples[0]}</div> */}
-                        <div>sources: {term.def.sources[0]}</div>
-                        
-                    </div>)
+  let count = 0;
 
-    return (
-        <React.Fragment>
-            {termDis}
-        </React.Fragment>
-    )
-}
+  return (
+    <div>
+      <form onSubmit={updateHandler}>
+        <label htmlFor="term">
+          Term
+          <input
+            id="term"
+            type="text"
+            name="term"
+            defaultValue={termState.term}
+            onBlur={inputHandler}
+          />
+        </label>
+        <label htmlFor="definition">
+          Definition
+          <input
+            id="definition"
+            type="text"
+            name="definition"
+            defaultValue={termState.definition}
+            onBlur={inputHandler}
+          ></input>
+        </label>
+        <label htmlFor="examples">
+          examples
+          <input
+            id="examples"
+            type="text"
+            name="examples"
+            defaultValue={termState.examples[0]}
+            onBlur={inputHandler}
+          ></input>
+        </label>
+        <label htmlFor="sources">
+          sources
+          <input
+            id="term"
+            type="text"
+            name="sources"
+            defaultValue={termState.sources[0]}
+            onBlur={inputHandler}
+          ></input>
+        </label>
+        <button>Update</button>
+      </form>
+      <button onClick={() => deleteHandler(term.term)}>Delete</button>
+    </div>
+  );
+};
 
 export default Term;

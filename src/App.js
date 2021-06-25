@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import Term from './components/Term'
+import TermList from './components/TermList'
+import SearchTerm from './components/SearchTerm';
+import SubmitTerm from './components/SubmitTerm';
 
 function App() {
 
@@ -9,7 +11,8 @@ function App() {
 
   return (
     <div className="App">
-      <Term />
+      <SubmitTerm />
+      <TermList />
     </div>
   );
 }
