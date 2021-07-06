@@ -1,4 +1,22 @@
-export const updateTerm = async ({term, definition, examples, sources, oldTerm}) => {
+export const updateTerm = async (updateTerm) => {
+    const term = updateTerm.term;
+    const definition = updateTerm.definition;
+    const examples = updateTerm.examples;
+    const sources = updateTerm.sources;
+    const oldTerm = updateTerm.oldTerm;
+
+
+    let update = {
+      term: term || oldTerm,
+      definition,
+      examples,
+      sources,
+  }
+
+    Object.keys(update).forEach(key => update[key] === undefined ? delete update[key] : {})
+
+    console.log({...update})
+
     let response = await fetch(
       `http://localhost:4000/term/${oldTerm}`,
       {
@@ -6,12 +24,7 @@ export const updateTerm = async ({term, definition, examples, sources, oldTerm})
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            term,
-            definition,
-            examples,
-            sources
-        })
+        body: JSON.stringify({...update})
       }
     );
     const data = await response.json();

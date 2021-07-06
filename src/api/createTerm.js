@@ -7,7 +7,7 @@ export const createTerm = async ({term, definition, examples, sources}) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            term,
+            term: term.toLowerCase(),
             definition,
             examples,
             sources

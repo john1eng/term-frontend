@@ -10,5 +10,4 @@ export const fetchAllTerms = async () => {
     console.log(data.def);
     return data.def
     
-    // setTerm(response);
   };
